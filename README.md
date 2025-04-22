@@ -1,3 +1,4 @@
+
 # 🚀 Kubernetes Event-Driven Autoscaler (KEDA) Manager
 
 This script automates operations on a bare Kubernetes cluster, including connecting to the cluster, installing necessary tools (Helm, KEDA), deploying applications with event-driven scaling, and retrieving health status for deployments.
@@ -49,31 +50,40 @@ cd simplismart
 
 # 2. Make the script executable
 chmod +x keda-manager.sh
+```
 
+---
 
-Usage
-📌 Command Syntax
+## 📝 Usage
 
+### 📌 Command Syntax
+
+```bash
 ./keda-manager.sh [--kubeconfig <path>] <command> [args]
---kubeconfig <path>: (Optional) Specify kubeconfig file path (default: ~/.kube/config)
+```
 
-<command>: The operation to perform (e.g., install-helm, install-keda, deploy, health)
+- `--kubeconfig <path>`: (Optional) Specify kubeconfig file path (default: `~/.kube/config`)
+- `<command>`: The operation to perform (e.g., `install-helm`, `install-keda`, `deploy`, `health`)
+- `[args]`: Command-specific arguments
 
-[args]: Command-specific arguments
+---
 
-📋 Example Usage Scenarios
+### 📋 Example Usage Scenarios
 
-Command	Description	Example
-connect	Connect to the Kubernetes cluster	./keda-manager.sh --kubeconfig ~/.kube/mycluster.yaml connect
-install-helm	Installs Helm	./keda-manager.sh install-helm
-install-keda	Installs KEDA using Helm	./keda-manager.sh install-keda
-deploy <name> <image> <port>	Deploy an app with event-driven scaling	./keda-manager.sh deploy myapp nginx:latest 80
-health <name>	Get health/resource metrics for a deployment	./keda-manager.sh health myapp
-help	Show available commands	./keda-manager.sh help
-💡 Example Workflow
-bash
-Copy
-Edit
+| Command | Description | Example |
+|--------|-------------|---------|
+| `connect` | Connect to the Kubernetes cluster | `./keda-manager.sh --kubeconfig ~/.kube/mycluster.yaml connect` |
+| `install-helm` | Installs Helm | `./keda-manager.sh install-helm` |
+| `install-keda` | Installs KEDA using Helm | `./keda-manager.sh install-keda` |
+| `deploy <name> <image> <port>` | Deploy an app with event-driven scaling | `./keda-manager.sh deploy myapp nginx:latest 80` |
+| `health <name>` | Get health/resource metrics for a deployment | `./keda-manager.sh health myapp` |
+| `help` | Show available commands | `./keda-manager.sh help` |
+
+---
+
+### 💡 Example Workflow
+
+```bash
 # Connect to Kubernetes cluster
 ./keda-manager.sh --kubeconfig ~/.kube/mycluster.yaml connect
 
@@ -88,3 +98,4 @@ Edit
 
 # Check deployment health
 ./keda-manager.sh health myapp
+```
