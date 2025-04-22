@@ -25,7 +25,7 @@ Before setting up the Kubernetes cluster, the following infrastructure was creat
 - **NAT Gateway**: Provides access to the internet for private subnets.
 - **Routing Tables**: For controlling the traffic flow between subnets.
 - **Internal Hosted Zones (Route 53)**: For DNS resolution inside the VPC.
-- **Bastion Node**: Used for secure access to private nodes, provisioned using Terraform and bootstrapped with a custom `user-data.sh` script.
+- **Bastion Node**: Used for secure access to private k8s cluster, provisioned using Terraform and bootstrapped with a custom `user-data.sh` script.
 
 ---
 
@@ -33,11 +33,15 @@ Before setting up the Kubernetes cluster, the following infrastructure was creat
 
 Once the bastion node is ready, the Kubernetes cluster is configured using Kops with the provided `kops.yaml` configuration file.
 
-Ensure the following before usage:
+Make sure you change the vpc-id, subnet-ids, bastion-private ip and ami according to your needs.
 
-- Kubernetes Cluster is accessible via `kubectl`.
-- Helm is either already installed or will be installed by the script.
-- Metrics Server is installed for resource utilization metrics.
+Commands to bring up kops cluster
+
+- kops create -f kops.yaml --state=s3://S3_STATE_BUCKET 
+- kops update cluster –name NAME --state=s3://S3_STATE_BUCKET --yes
+- kops export kubecfg NAME --state=s3://S3_STATE_BUCKET --admin
+- kops validate cluster --name NAME --state=s3://S3_STATE_BUCKET --wait 20m
+
 
 ---
 
@@ -72,11 +76,11 @@ chmod +x keda-manager.sh
 
 | Command | Description | Example |
 |--------|-------------|---------|
-| `connect` | Connect to the Kubernetes cluster | `./keda-manager.sh --kubeconfig ~/.kube/mycluster.yaml connect` |
-| `install-helm` | Installs Helm | `./keda-manager.sh install-helm` |
-| `install-keda` | Installs KEDA using Helm | `./keda-manager.sh install-keda` |
-| `deploy <name> <image> <port>` | Deploy an app with event-driven scaling | `./keda-manager.sh deploy myapp nginx:latest 80` |
-| `health <name>` | Get health/resource metrics for a deployment | `./keda-manager.sh health myapp` |
+| `connect` | Connect to the Kubernetes cluster | `./keda-manager.sh --kubeconfig kubeconfig connect` |
+| `install-helm` | Installs Helm | `./keda-manager.sh --kubeconfig kubeconfig install-helm` |
+| `install-keda` | Installs KEDA using Helm | `./keda-manager.sh --kubeconfig kubeconfig install-keda` |
+| `deploy <name> <image> <port>` | Deploy an app with event-driven scaling | `./keda-manager.sh --kubeconfig kubeconfig deploy myapp nginx:latest 80` |
+| `health <name>` | Get health/resource metrics for a deployment | `./keda-manager.sh --kubeconfig kubeconfig health myapp` |
 | `help` | Show available commands | `./keda-manager.sh help` |
 
 ---
@@ -85,16 +89,16 @@ chmod +x keda-manager.sh
 
 ```bash
 # Connect to Kubernetes cluster
-./keda-manager.sh --kubeconfig ~/.kube/mycluster.yaml connect
+./keda-manager.sh --kubeconfig kubeconfig connect
 
 # Install Helm
-./keda-manager.sh install-helm
+./keda-manager.sh --kubeconfig kubeconfig install-helm
 
 # Install KEDA
-./keda-manager.sh install-keda
+./keda-manager.sh --kubeconfig kubeconfig install-keda
 
 # Deploy an application
-./keda-manager.sh deploy myapp nginx:latest 80
+./keda-manager.sh --kubeconfig kubeconfig deploy myapp nginx:latest 80
 
 # Check deployment health
 ./keda-manager.sh health myapp
