@@ -49,3 +49,16 @@ cd simplismart
 
 # 2. Make the script executable
 chmod +x keda-manager.sh
+
+## 📝 Usage
+
+### 📌 Command Syntax
+
+```bash
+./keda-manager.sh [--kubeconfig <path>] <command> [args]
+
+--kubeconfig <path>: (Optional) Specify kubeconfig file path (default: ~/.kube/config)
+
+<command>: The operation to perform (e.g., install-helm, install-keda, deploy, health)
+
+[args]: Command-specific arguments
